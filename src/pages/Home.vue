@@ -11,7 +11,7 @@
     </div>
     <FooterComponent :isEmpty="cartList.length === 0" :total="totalPrice"  @onClick="cartClick()" />
     <div v-if="screenOpen" v-on:click="cartClick()" class="screen" :style="screenSytle"></div>
-    <MenuPanel :isOpen="screenOpen" :list="menuList" @onChange="onTargetChange" @onClear="oncartClear"/>
+    <MenuPanel :isOpen="screenOpen" :list="menuList" @onChange="onTargetChange" @onClear="onCartClear"/>
   </div>
 </template>
 
@@ -87,25 +87,17 @@ export default {
         });
       }
       this.totalPrice = temp;
+      if (this.screenOpen) this.cartListMaker() 
     },
     cartClick() {
       this.screenOpen = !this.screenOpen;
       if (this.screenOpen) {
-        let temp = [];
-        this.cartList.forEach(value => {
-          let arr = value.split('-');
-          temp.push({
-            ...this.dataSource[arr[0]].children[arr[1]],
-            index: arr[1],
-            parentIndex: arr[0],
-          });
-        });
-        this.menuList = temp;
+        this.cartListMaker();
       } else {
         this.menuList = [];
       }
     },
-    oncartClear() {
+    onCartClear() {
       this.cartList.forEach(value => {
         let arr = value.split('-');
         this.dataSource[arr[0]].children[arr[1]].cnt = 0;
@@ -114,6 +106,18 @@ export default {
       this.cartList = [];
       this.screenOpen = !this.screenOpen;
     },
+    cartListMaker() {
+      let temp = [];
+      this.cartList.forEach(value => {
+        let arr = value.split('-');
+        temp.push({
+          ...this.dataSource[arr[0]].children[arr[1]],
+          index: arr[1],
+          parentIndex: arr[0],
+        });
+      });
+      this.menuList = temp;
+    }
   },
 }
 </script>

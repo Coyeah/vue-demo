@@ -32,9 +32,6 @@ export default {
         'bottom': newValue ? '0px' : '-400px',
       }
     },
-    list(newValue) {
-      // console.log(newValue);
-    }
   },
   methods: {
     onChange(count, index, parentIndex) {
